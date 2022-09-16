@@ -15,7 +15,7 @@ React
 
 To visit my project please click on the Link\
 \
-https://tvmaze-shyam.netlify.app/
+https://tv-maze-pvb.netlify.app
 
 ## :link: Links
 
