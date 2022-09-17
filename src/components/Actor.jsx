@@ -1,5 +1,6 @@
 import React from "react";
 import "../App.css";
+import Description from "./Description";
 import noImage from "./noImage.jfif";
 
 function Actor(props) {
@@ -10,37 +11,48 @@ function Actor(props) {
           <div className="col-md-3 my-4" key={index}>
             <img
               src={
-                item.person.image !== null ? item.person.image.medium : noImage
+                item._embedded.show.image
+                  ? item._embedded.show.image.medium
+                  : noImage
               }
               alt=""
             />
             <div className="card-body">
               <h5 className="card-title">
-                {item.person.name !== null && item.person.name}{" "}
+                {item._embedded.show.name !== null && item._embedded.show.name}{" "}
               </h5>
               <p className="card-text">
-                {/* <strong>
+                <strong>
                   IMDB rating:{" "}
-                  {item.show.rating.value !== null
-                    ? item.show.rating.average
+                  {item._embedded.show.rating.value !== null
+                    ? item._embedded.show.rating.average
                     : "NA"}{" "}
                   &#11088;
-                </strong> */}
-                {/* <br /> */}
+                </strong>
+                <br />
                 <small className="text-muted">
-                  {/* Language: {item.show.language && item.show.language} */}
+                  Language:{" "}
+                  {item._embedded.show.language && item._embedded.show.language}
                   <br />
-                  country:{" "}
-                  {item.person.country ? item.person.country.name : "unknown"}
+                  genres:{" "}
+                  {item._embedded.show.genres
+                    ? item._embedded.show.genres[0]
+                    : "unknown"}
                 </small>
               </p>
-              <a
-                href={item.person.url}
-                target="blank"
-                className="btn btn-sm btn-primary"
+              <div
+                className="d-flex"
+                style={{ width: "100%", justifyContent: "space-around" }}
               >
-                Read more...
-              </a>
+                <a
+                  className="readMore"
+                  href={item._embedded.show.url}
+                  target="blank"
+                >
+                  <span>Official site</span>
+                </a>
+                <Description show={item._embedded.show} />
+              </div>
             </div>
           </div>
         );
@@ -49,4 +61,4 @@ function Actor(props) {
   );
 }
 
-export default Actor;
+export default React.memo(Actor);

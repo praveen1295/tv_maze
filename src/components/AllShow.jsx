@@ -43,4 +43,4 @@ function AllShow(props) {
   );
 }
 
-export default AllShow;
+export default React.memo(AllShow);

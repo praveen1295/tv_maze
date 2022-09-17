@@ -12,6 +12,18 @@ function TV_Maze() {
   const [searchValue, setSearchValue] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const getActorId = async (data) => {
+    let actorId = data[0].person.id;
+    const actorURL = `https://api.tvmaze.com/people/${actorId}/castcredits?embed=show`;
+    try {
+      const actorResponse = await fetch(actorURL);
+      const actorData = await actorResponse.json();
+      setShowList(actorData);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const url =
     (show && `https://api.tvmaze.com/search/shows?q=${searchValue}`) ||
     (actor && `https://api.tvmaze.com/search/people?q=${searchValue}`) ||
@@ -19,10 +31,12 @@ function TV_Maze() {
 
   const getData = async () => {
     setLoading(true);
+
     try {
       const response = await fetch(url);
       const data = await response.json();
-      setShowList(data);
+      actor && searchValue !== "" && getActorId(data);
+      !actor && setShowList(data);
       allShow.flag && setAllshow({ ...allShow, allShowData: data });
     } catch (error) {
       console.log(error);
@@ -34,7 +48,6 @@ function TV_Maze() {
     let value = e.target.value;
     if (show === actor) {
       alert("please select any option actor or shows");
-      // setSearchValue("");
       value = "";
       return;
     }
@@ -69,9 +82,11 @@ function TV_Maze() {
       for (let i = 0; i < radioBtn.length; i++) {
         radioBtn[i].checked = false;
       }
-      setActor(false);
-      setShow(false);
-      setAllshow({ ...allShow, flag: true });
+      if (show !== actor) {
+        setActor(false);
+        setShow(false);
+        setAllshow({ ...allShow, flag: true });
+      }
     }
   };
 
@@ -153,4 +168,4 @@ function TV_Maze() {
   );
 }
 
-export default TV_Maze;
+export default React.memo(TV_Maze);

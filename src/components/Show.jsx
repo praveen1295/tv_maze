@@ -49,4 +49,4 @@ function Show(props) {
   );
 }
 
-export default Show;
+export default React.memo(Show);
